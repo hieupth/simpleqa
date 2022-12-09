@@ -1,0 +1,28 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+    - 
+      name: Checkout
+      uses: actions/checkout@master
+    - 
+      name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.9"
+    -
+      name: Install dependencies
+      run: pip install --upgrade twine wheel
+    - 
+      name: Build package
+      run: python setup.py bdist_wheel 
+    -
+      name: Publish package
+      run: twine upload -u __token__ -p ${{ secrets.PYPI_API_TOKEN }} --skip-existing dist/*
